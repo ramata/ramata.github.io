@@ -71,10 +71,6 @@ header {
   text-align: center;
   color: white;
   background: #18BC9C;
-  background-size: cover;
-background-image: url("profile.jpg");
-height: 400px;
-width: 400px;
 }
 header .container {
   padding-top: 100px;
