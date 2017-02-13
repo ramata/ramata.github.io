@@ -72,7 +72,9 @@ header {
   color: white;
   background: #18BC9C;
   background-size: cover;
-background-image: url("https://farm3.staticflickr.com" height="400px" width="400px")
+background-image: url("profile.jpg");
+height: 400px;
+width: 400px;
 }
 header .container {
   padding-top: 100px;
