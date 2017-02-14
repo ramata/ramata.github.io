@@ -1,58 +1,46 @@
 <?php
-/*
-From http://www.html-form-guide.com
-This is the simplest emailer one can have in PHP.
-If this does not work, then the PHP email configuration is bad!
-*/
-$msg="";
-if(isset($_POST['submit']))
-{
-    /* ****Important!****
-    replace name@your-web-site.com below
-    with an email address that belongs to
-    the website where the script is uploaded.
-    For example, if you are uploading this script to
-    www.my-web-site.com, then an email like
-    form@my-web-site.com is good.
-    */
 
-	$from_add = "form@https://ramata.github.io/";
+if(isset($_POST['Email_Address'])) {
 
-	$to_add = "rama.diallo@gmail.com"; //<-- put your yahoo/gmail email address here
+	$email_to = "rama.diallo@gmail.com";
+	$email_subject = "Mail from Web form";
+	$thankyou = "thanks.html";
 
-	$subject = "Test Subject";
-	$message = "Test Message";
-
-	$headers = "From: $from_add \r\n";
-	$headers .= "Reply-To: $from_add \r\n";
-	$headers .= "Return-Path: $from_add\r\n";
-	$headers .= "X-Mailer: PHP \r\n";
-
-
-	if(mail($to_add,$subject,$message,$headers))
-	{
-		$msg = "Mail sent OK";
+	function died($error) {
+		echo "Sorry, but there were error(s) found with the form you submitted. ";
+		echo "These errors appear below.<br /><br />";
+		echo $error."<br /><br />";
+		echo "Please go back and fix these errors.<br /><br />";
+		die();
 	}
-	else
-	{
- 	   $msg = "Error sending email!";
+
+
+	$full_name = $_POST['Full_Name'];
+	$email_from = $_POST['Email_Address'];
+	$telephone = $_POST['Telephone'];
+	$comments = $_POST['Message'];
+
+
+	$email_message = "Message details below.\r\n";
+
+	function clean_string($string) {
+	  $bad = array("content-type","bcc:","to:","cc:","href");
+	  return str_replace($bad,"",$string);
 	}
-}
+
+	$email_message .= "Full Name: ".clean_string($full_name)."\r\n";
+	$email_message .= "Email: ".clean_string($email_from)."\r\n";
+	$email_message .= "Telephone: ".clean_string($telephone)."\r\n";
+	$email_message .= "Message: ".clean_string($comments)."\r\n";
+
+$headers = 'From: '.$email_from."\r\n".
+'Reply-To: '.$email_from."\r\n" .
+'X-Mailer: PHP/' . phpversion();
+@mail($email_to, $email_subject, $email_message, $headers);
+header("Location: $thankyou");
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-	<title>Test form to email</title>
-</head>
-
-<body>
-<?php echo $msg ?>
-<p>
-<form action='<?php echo htmlentities($_SERVER['PHP_SELF']); ?>' method='post'>
-<input type='submit' name='submit' value='Submit'>
-</form>
-</p>
-
-
-</body>
-</html>
+<script>location.replace('<?php echo $thankyou;?>')</script>
+<?php
+}
+die();
+?>
